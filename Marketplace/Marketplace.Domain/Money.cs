@@ -12,7 +12,15 @@ namespace Marketplace.Domain
     {
         public decimal Amount { get; }
 
+        public IEnumerable<Money> Children { get; }
+
         public Money(decimal amount) => Amount = amount;
+
+        public Money(decimal amount, IEnumerable<Money> children) 
+        {
+            Amount = amount; 
+            Children = children;
+        } 
 
         public Money Add(Money summand) => new Money(Amount + summand.Amount);
 

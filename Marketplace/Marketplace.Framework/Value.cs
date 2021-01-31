@@ -5,13 +5,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Marketplace.Framework
 {
     public abstract class Value<T> where T : Value<T>
     {
-        [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
         private static readonly Member[] Members = GetMembers().ToArray();
 
         public override bool Equals(object other)
@@ -25,9 +25,16 @@ namespace Marketplace.Framework
             {
                 var otherValue = m.GetValue(other);
                 var thisValue = m.GetValue(this);
-                return m.IsNonStringEnumerable
-                    ? GetEnumerableValues(otherValue).SequenceEqual(GetEnumerableValues(thisValue))
-                    : (otherValue?.Equals(thisValue) ?? thisValue == null);
+
+                if (m.IsNonStringEnumerable)
+                {
+                    if (thisValue != null && otherValue != null)
+                        return GetEnumerableValues(otherValue).SequenceEqual(GetEnumerableValues(thisValue));
+
+                    return thisValue == otherValue;
+                }
+
+                return (otherValue?.Equals(thisValue) ?? thisValue == null);
             });
         }
 
@@ -72,7 +79,7 @@ namespace Marketplace.Framework
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
             while (t != typeof(object))
             {
-                if (t == null) continue;
+                if (t == null) break;
                 foreach (var p in t.GetProperties(flags)) yield return new Member(p);
                 foreach (var f in t.GetFields(flags)) yield return new Member(f);
                 t = t.BaseType;

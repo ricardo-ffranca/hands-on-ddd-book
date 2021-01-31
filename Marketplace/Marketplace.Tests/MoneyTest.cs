@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -40,6 +41,34 @@ namespace Marketplace.Tests
             var banknote = new Money(5);
 
             Assert.Equal(banknote, coin1 + coin2 + coin3);
+        }
+
+        [Fact]
+        public void The_equals()
+        {
+            var list1_1_1 = new List<Money>();
+            list1_1_1.Add(new Money(30));
+
+            var list1_1 = new List<Money>();
+            list1_1.Add(new Money(20, list1_1_1));
+
+            var list1 = new List<Money>();
+            list1.Add(new Money(10, list1_1));
+
+            var coin1 = new Money(2, list1);
+
+            var list2_1_1 = new List<Money>();
+            list1_1_1.Add(new Money(30));
+
+            var list2_1 = new List<Money>();
+            list2_1.Add(new Money(20, list1_1_1));
+
+            var list2 = new List<Money>();
+            list2.Add(new Money(10, list2_1));
+
+            var coin2 = new Money(2, list2);
+
+            Assert.Equal(coin1, coin2);
         }
     }
 }
