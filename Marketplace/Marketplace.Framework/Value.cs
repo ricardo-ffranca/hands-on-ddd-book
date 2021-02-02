@@ -34,7 +34,7 @@ namespace Marketplace.Framework
                     return thisValue == otherValue;
                 }
 
-                return (otherValue?.Equals(thisValue) ?? thisValue == null);
+                return otherValue?.Equals(thisValue) ?? thisValue == null;
             });
         }
 
@@ -94,10 +94,12 @@ namespace Marketplace.Framework
 
         private static int CombineHashCodes(IEnumerable<object> objs)
         {
-            unchecked
-            {
-                return objs.Aggregate(17, (current, obj) => current * 59 + (obj?.GetHashCode() ?? 0));
-            }
+            var hashCode = new HashCode();
+
+            foreach (var obj in objs)
+                hashCode.Add(obj);
+
+            return hashCode.ToHashCode();
         }
 
         private struct Member
