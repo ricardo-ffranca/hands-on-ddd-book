@@ -42,5 +42,23 @@ namespace Marketplace.Tests
 
             Assert.Equal(banknote, coin1 + coin2 + coin3);
         }
+
+        [Fact]
+        public void HashCode_of_money_should_be_equal()
+        {
+            var coin1 = new Money(1);
+            var coin2 = new Money(1);
+
+            Assert.Equal(coin1.GetHashCode(), coin2.GetHashCode());
+        }
+
+        [Fact]
+        public void HashCode_of_money_should_not_be_equal()
+        {
+            var coin1 = new Money(1);
+            var coin2 = new Money(2);
+
+            Assert.NotEqual(coin1.GetHashCode(), coin2.GetHashCode());
+        }
     }
 }
