@@ -1,0 +1,23 @@
+﻿using Marketplace.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace Marketplace.Domain
+{
+    public class ClassifiedAdText : Value<ClassifiedAdText>
+    {
+        public string Value { get; }
+
+        internal ClassifiedAdText(string text) => Value = text;
+
+        public static ClassifiedAdText FromString(string text) =>
+            new ClassifiedAdText(text);
+
+        public static implicit operator string(ClassifiedAdText text) =>
+            text.Value;
+    }
+}

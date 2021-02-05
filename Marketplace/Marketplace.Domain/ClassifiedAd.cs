@@ -9,25 +9,67 @@ namespace Marketplace.Domain
     public class ClassifiedAd
     {
         public ClassifiedAdId Id { get; }
+        public UserId OwnerId { get; }
+        public ClassifiedAdTitle Title { get; private set; }
+        public ClassifiedAdText Text { get; private set; }
+        public Price Price { get; private set; }
+        public ClassifiedAdState State { get; private set; }
+        public UserId ApprovedBy { get; private set; }
 
         public ClassifiedAd(ClassifiedAdId id, UserId ownerId)
         {
             Id = id;
-            _ownerId = ownerId;
+            OwnerId = ownerId;
+            State = ClassifiedAdState.Inactive;
+            EnsureValidState();
         }
 
-        private UserId _ownerId;
+        public void SetTitle(ClassifiedAdTitle title)
+        {
+            Title = title;
+            EnsureValidState();
+        }
 
-        private string _title;
+        public void UpdateText(ClassifiedAdText text)
+        {
+            Text = text;
+            EnsureValidState();
+        }
 
-        private string _text;
+        public void UpdatePrice(Price price)
+        {
+            Price = price;
+            EnsureValidState();
+        }
 
-        private decimal _price;
+        public void RequestToPublish()
+        {
+            State = ClassifiedAdState.PendingReview;
+            EnsureValidState();
+        }
 
-        public void SetTitle(string title) => _title = title;
+        protected void EnsureValidState()
+        {
+            var valid =
+                Id != null &&
+                OwnerId != null &&
+                (State switch
+                {
+                    ClassifiedAdState.PendingReview =>
+                        Title != null
+                        && Text != null
+                        && Price?.Amount > 0,
+                    ClassifiedAdState.Active =>
+                        Title != null
+                        && Text != null
+                        && Price?.Amount > 0
+                        && ApprovedBy != null,
+                    _ => true
+                });
 
-        public void UpdateText(string text) => _text = text;
-
-        public void UpdatePrice(decimal price) => _price = price;
+            if (!valid)
+                throw new InvalidEntityStateException(
+                    this, $"Post-checks failed in state {State}");
+        }
     }
 }
