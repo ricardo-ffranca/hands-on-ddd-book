@@ -9,8 +9,10 @@ namespace Marketplace.Domain
 {
     public class ClassifiedAdId : Value<ClassifiedAdId>
     {
-        private readonly Guid _value;
+        private Guid Value { get; }
 
-        public ClassifiedAdId(Guid value) => _value = value;
+        public ClassifiedAdId(Guid value) => Value = value;
+
+        public static implicit operator Guid(ClassifiedAdId self) => self.Value;
     }
 }

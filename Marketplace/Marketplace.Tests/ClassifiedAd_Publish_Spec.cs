@@ -30,7 +30,7 @@ namespace Marketplace.Tests
 
             _classifiedAd.RequestToPublish();
 
-            Assert.Equal(ClassifiedAdState.PendingReview,
+            Assert.Equal(ClassifiedAd.ClassifiedAdState.PendingReview,
                 _classifiedAd.State);
         }
 
