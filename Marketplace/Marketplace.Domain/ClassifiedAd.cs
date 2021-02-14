@@ -105,7 +105,4 @@ namespace Marketplace.Domain
             MarkedAsSold
         }
     }
-
-
-
 }
