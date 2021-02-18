@@ -34,7 +34,7 @@ namespace Marketplace
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClassifiedAds", Version = "v1" });
             });
 
-            services.AddSingleton(new ClassifiedAdsApplicationService());
+            services.AddSingleton<ClassifiedAdsApplicationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

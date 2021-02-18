@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Framework
 {
-    public abstract class Entity<TId>
+    public abstract class AggregateRoot<TId>
         where TId : Value<TId>
     {
         public TId Id { get; protected set; }
 
-        private readonly List<object> _events;
+        protected abstract void When(object @event);
 
-        protected Entity() => _events = new List<object>();
+        private readonly List<object> _changes;
+
+        protected AggregateRoot() => _changes = new List<object>();
 
         protected void Apply(object @event)
         {
             When(@event);
             EnsureValidState();
-            _events.Add(@event);
+            _changes.Add(@event);
         }
 
-        protected abstract void When(object @event);
+        public IEnumerable<object> GetChanges()
+            => _changes.AsEnumerable();
 
-        public IEnumerable<object> GetChanges() =>
-        _events.AsEnumerable();
-
-        public void ClearChanges() => _events.Clear();
+        public void ClearChanges() => _changes.Clear();
 
         protected abstract void EnsureValidState();
     }

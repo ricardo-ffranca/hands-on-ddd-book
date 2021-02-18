@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Domain
 {
-    public class ClassifiedAd : Entity
+    public class ClassifiedAd : AggregateRoot<ClassifiedAdId>
     {
         public ClassifiedAdId Id { get; private set; }
         public UserId OwnerId { get; private set; }
@@ -67,7 +67,7 @@ namespace Marketplace.Domain
                 case Events.ClassifiedAdPriceUpdated e:
                     Price = new Price(e.Price, e.CurrencyCode);
                     break;
-                case Events.ClassifiedAdSentForReview e:
+                case Events.ClassifiedAdSentForReview _:
                     State = ClassifiedAdState.PendingReview;
                     break;
             }
