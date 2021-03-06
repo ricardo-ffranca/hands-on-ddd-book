@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Framework
 {
-    public abstract class AggregateRoot<TId>
+    public abstract class AggregateRoot<TId> : IInternalEventHandler
         where TId : Value<TId>
     {
         public TId Id { get; protected set; }
@@ -30,5 +30,13 @@ namespace Marketplace.Framework
         public void ClearChanges() => _changes.Clear();
 
         protected abstract void EnsureValidState();
+
+        protected void ApplyToEntity(
+            IInternalEventHandler entity,
+            object @event)
+            => entity?.Handle(@event);
+
+        void IInternalEventHandler.Handle(object @event)
+            => When(@event);
     }
 }

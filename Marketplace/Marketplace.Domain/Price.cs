@@ -8,6 +8,8 @@ namespace Marketplace.Domain
 {
     public class Price : Money
     {
+        protected Price() : base() { }
+
         private Price(decimal amount, string currencyCode, ICurrencyLookup currencyLookup)
            : base(amount, currencyCode, currencyLookup)
         {
@@ -18,7 +20,7 @@ namespace Marketplace.Domain
         }
 
         internal Price(decimal amount, string currencyCode)
-            : base(amount, new CurrencyDetails
+            : base(amount, new Currency
             {
                 CurrencyCode = currencyCode
             }) 

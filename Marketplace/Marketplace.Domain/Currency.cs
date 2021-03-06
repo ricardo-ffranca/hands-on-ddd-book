@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Domain
 {
-    public class CurrencyDetails : Value<CurrencyDetails>
+    public class Currency : Value<Currency>
     {
         public string CurrencyCode { get; set; }
         public bool InUse { get; set; }
         public int DecimalPlaces { get; set; }
 
-        //TODO Explicit declaration of nullable reference types
-        public static CurrencyDetails None = new CurrencyDetails
+        public static Currency None = new Currency
         {
             InUse = false
         };
     }
+
 }

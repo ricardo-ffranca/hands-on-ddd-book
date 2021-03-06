@@ -14,13 +14,15 @@ namespace Marketplace.Domain
 
         public decimal Amount { get; }
 
-        public CurrencyDetails Currency { get; }
+        public Currency Currency { get; }
 
         public static Money FromDecimal(decimal amount, string currency, ICurrencyLookup currencyLookup) =>
             new Money(amount, currency, currencyLookup);
 
         public static Money FromString(string amount, string currency,  ICurrencyLookup currencyLookup) =>
             new Money(decimal.Parse(amount), currency, currencyLookup);
+
+        protected Money() { }
 
         protected Money(decimal amount, string currencyCode, ICurrencyLookup currencyLookup)
         {
@@ -39,7 +41,7 @@ namespace Marketplace.Domain
             Currency = currency;
         }
 
-        protected Money(decimal amount, CurrencyDetails currency)
+        protected Money(decimal amount, Currency currency)
         {
             Amount = amount;
             Currency = currency;

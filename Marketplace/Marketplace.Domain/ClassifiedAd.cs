@@ -17,12 +17,17 @@ namespace Marketplace.Domain
         public ClassifiedAdState State { get; private set; }
         public UserId ApprovedBy { get; private set; }
 
-        public ClassifiedAd(ClassifiedAdId id, UserId ownerId) =>
+        public List<Picture> Pictures { get; private set; }
+
+        public ClassifiedAd(ClassifiedAdId id, UserId ownerId)
+        {
+            Pictures = new List<Picture>();
             Apply(new Events.ClassifiedAdCreated
             {
                 Id = id,
                 OwnerId = ownerId
             });
+        }
 
         public void SetTitle(ClassifiedAdTitle title) =>
             Apply(new Events.ClassifiedAdTitleChanged
@@ -49,6 +54,21 @@ namespace Marketplace.Domain
         public void RequestToPublish() =>
             Apply(new Events.ClassifiedAdSentForReview { Id = Id });
 
+        public void AddPicture(Uri pictureUri, PictureSize size)
+        {
+            Apply(new Events.PictureAddedToAClassifiedAd
+            {
+                PictureId = new Guid(),
+                ClassifiedAdId = Id,
+                Url = pictureUri.ToString(),
+                Height = size.Height,
+                Width = size.Width,
+                Order = NewPictureOrder()
+            });
+
+            int NewPictureOrder() => Pictures.Any() ? Pictures.Max(x => x.Order) + 1 : 0;
+        }
+
         protected override void When(object @event)
         {
             switch (@event)
@@ -70,7 +90,28 @@ namespace Marketplace.Domain
                 case Events.ClassifiedAdSentForReview _:
                     State = ClassifiedAdState.PendingReview;
                     break;
+                case Events.PictureAddedToAClassifiedAd e:
+                    var picture = new Picture(Apply);
+                    ApplyToEntity(picture, e);
+                    Pictures.Add(picture);
+                    break;
             }
+        }
+
+        private Picture FindPicture(PictureId id)
+            => Pictures.FirstOrDefault(x => x.Id == id);
+
+        private Picture FirstPicture
+            => Pictures.OrderBy(x => x.Order).FirstOrDefault();
+
+        public void ResizePicture(PictureId pictureId, PictureSize newSize)
+        {
+            var picture = FindPicture(pictureId);
+            if (picture == null)
+                throw new InvalidOperationException(
+                    "Cannot resize a picture that I don't have");
+
+            picture.Resize(newSize);
         }
 
         protected override void EnsureValidState()
@@ -83,12 +124,14 @@ namespace Marketplace.Domain
                     ClassifiedAdState.PendingReview =>
                         Title != null
                         && Text != null
-                        && Price?.Amount > 0,
-                    ClassifiedAdState.Active =>
-                        Title != null
-                        && Text != null
                         && Price?.Amount > 0
-                        && ApprovedBy != null,
+                        && FirstPicture.HasCorrectSize(),
+                    ClassifiedAdState.Active =>
+                       Title != null
+                       && Text != null
+                       && Price?.Amount > 0
+                       && FirstPicture.HasCorrectSize()
+                       && ApprovedBy != null,
                     _ => true
                 });
 

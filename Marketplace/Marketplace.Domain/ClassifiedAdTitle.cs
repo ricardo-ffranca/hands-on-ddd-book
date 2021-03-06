@@ -31,7 +31,9 @@ namespace Marketplace.Domain
             return new ClassifiedAdTitle(value);
         }
 
-        public string Value { get; }
+        public string Value { get; private set; }
+
+        protected ClassifiedAdTitle() { }
 
         internal ClassifiedAdTitle(string value) => Value = value;
 

@@ -11,6 +11,8 @@ namespace Marketplace.Domain
     {
         private Guid Value { get; set; }
 
+        protected UserId() { }
+
         public UserId(Guid value) => Value = value;
 
         public static implicit operator Guid(UserId self) => self.Value;

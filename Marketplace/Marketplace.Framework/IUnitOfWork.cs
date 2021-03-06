@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Marketplace.Domain
+namespace Marketplace.Framework
 {
-    public interface ICurrencyLookup
+    public interface IUnitOfWork
     {
-        Currency FindCurrency(string currencyCode);
+        Task Commit();
     }
 }
