@@ -1,12 +1,13 @@
-﻿using Marketplace.Domain;
+﻿using Marketplace.Domain.ClassifiedAd;
+using Marketplace.Domain.Shared;
 using Marketplace.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Marketplace.Contracts.ClassifiedAds;
+using static Marketplace.ClassifiedAd.Contracts;
 
-namespace Marketplace.Api
+namespace Marketplace.ClassifiedAd
 {
     public class ClassifiedAdsApplicationService : IApplicationService
     {
@@ -69,7 +70,7 @@ namespace Marketplace.Api
                 throw new InvalidOperationException(
                     $"Entity with id {cmd.Id} already exists");
 
-            var classifiedAd = new ClassifiedAd(
+            var classifiedAd = new Domain.ClassifiedAd.ClassifiedAd(
                 new ClassifiedAdId(cmd.Id),
                 new UserId(cmd.OwnerId)
             );
@@ -80,7 +81,7 @@ namespace Marketplace.Api
 
         private async Task HandleUpdate(
             Guid classifiedAdId,
-            Action<ClassifiedAd> operation
+            Action<Domain.ClassifiedAd.ClassifiedAd> operation
         )
         {
             var classifiedAd = await _repository.Load(classifiedAdId.ToString());

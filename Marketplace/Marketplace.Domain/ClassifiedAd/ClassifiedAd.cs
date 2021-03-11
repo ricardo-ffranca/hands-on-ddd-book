@@ -1,11 +1,13 @@
-﻿using Marketplace.Framework;
+﻿using Marketplace.Domain.Shared;
+using Marketplace.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Marketplace.Domain.Shared.DomainExceptions;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
     public class ClassifiedAd : AggregateRoot<ClassifiedAdId>
     {

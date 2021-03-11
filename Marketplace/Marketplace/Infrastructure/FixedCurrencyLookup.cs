@@ -1,10 +1,10 @@
-﻿using Marketplace.Domain;
+﻿using Marketplace.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Marketplace
+namespace Marketplace.Infrastructure
 {
     public class FixedCurrencyLookup : ICurrencyLookup
     {

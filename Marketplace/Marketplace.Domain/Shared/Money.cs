@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.Shared
 {
     //TODO Ver sobre Structs e Record Types
     public class Money : Value<Money>
@@ -19,7 +19,7 @@ namespace Marketplace.Domain
         public static Money FromDecimal(decimal amount, string currency, ICurrencyLookup currencyLookup) =>
             new Money(amount, currency, currencyLookup);
 
-        public static Money FromString(string amount, string currency,  ICurrencyLookup currencyLookup) =>
+        public static Money FromString(string amount, string currency, ICurrencyLookup currencyLookup) =>
             new Money(decimal.Parse(amount), currency, currencyLookup);
 
         protected Money() { }

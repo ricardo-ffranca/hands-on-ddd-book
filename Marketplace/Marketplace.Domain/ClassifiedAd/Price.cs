@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Marketplace.Domain.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
     public class Price : Money
     {
@@ -23,8 +24,8 @@ namespace Marketplace.Domain
             : base(amount, new Currency
             {
                 CurrencyCode = currencyCode
-            }) 
-        { 
+            })
+        {
         }
 
         public new static Price FromDecimal(decimal amount, string currency,
