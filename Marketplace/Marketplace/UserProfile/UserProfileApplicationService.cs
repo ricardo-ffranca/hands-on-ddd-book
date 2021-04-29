@@ -28,14 +28,11 @@ namespace Marketplace.UserProfile
             switch (command)
             {
                 case Contracts.V1.RegisterUser cmd:
-                    if (await
-                    _repository.Exists(new UserId(cmd.UserId)))
+                    if (await _repository.Exists(new UserId(cmd.UserId)))
                         throw new InvalidOperationException($"Entity with id { cmd.UserId } already exists");
 
-
-                    var userProfile = new
-                    Domain.UserProfile.UserProfile(
-                        new UserId(cmd.UserId),
+                    var userProfile = new Domain.UserProfile
+                        .UserProfile(new UserId(cmd.UserId), 
                         FullName.FromString(cmd.FullName),
                         DisplayName.FromString(cmd.DisplayName,
                         _checkText));
@@ -44,23 +41,19 @@ namespace Marketplace.UserProfile
                     await _unitOfWork.Commit();
                     break;
 
-                case Contracts.V1.UpdateUserFullName cmd:
+                case Contracts.V1.UpdateUserFullName cmd: 
                     await HandleUpdate(cmd.UserId,
-                        profile =>
-            profile.UpdateFullName(FullName.FromString(cmd.FullName)));
+                        profile => profile.UpdateFullName(FullName.FromString(cmd.FullName)));
                     break;
 
                 case Contracts.V1.UpdateUserDisplayName cmd:
-                    await HandleUpdate(cmd.UserId,
-                        profile => profile.UpdateDisplayName(
-                            DisplayName.FromString(cmd.DisplayName,
-                            _checkText)));
+                    await HandleUpdate(cmd.UserId, profile => profile
+                    .UpdateDisplayName(DisplayName.FromString(cmd.DisplayName, _checkText)));
                     break;
 
                 case Contracts.V1.UpdateUserProfilePhoto cmd:
-                    await HandleUpdate(cmd.UserId,
-                        profile => profile.UpdateProfilePhoto(new
-                        Uri(cmd.PhotoUrl)));
+                    await HandleUpdate(cmd.UserId, profile => profile
+                    .UpdateProfilePhoto(new Uri(cmd.PhotoUrl)));
                     break;
 
                 default:
@@ -69,12 +62,10 @@ namespace Marketplace.UserProfile
             }
         }
 
-        private async Task HandleUpdate(
-            Guid userProfileId,
-            Action<Domain.UserProfile.UserProfile> operation)
+        private async Task HandleUpdate(Guid userProfileId, Action<Domain.UserProfile.UserProfile> operation)
         {
-            var classifiedAd = await _repository
-                .Load(new UserId(userProfileId));
+            var classifiedAd = await _repository.Load(new UserId(userProfileId));
+
             if (classifiedAd == null)
                 throw new InvalidOperationException($"Entity with id {userProfileId} cannot be found");
 

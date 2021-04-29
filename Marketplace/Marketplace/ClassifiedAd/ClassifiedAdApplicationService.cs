@@ -61,6 +61,9 @@ namespace Marketplace.ClassifiedAd
                         cmd.Id,
                         c => c.RequestToPublish()
                     ),
+                V1.Publish cmd =>
+                    HandleUpdate(cmd.Id, c => c.Publish(
+                        new UserId(cmd.ApprovedBy))),
                 _ => Task.CompletedTask
             };
 

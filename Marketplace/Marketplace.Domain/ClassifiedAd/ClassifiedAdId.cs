@@ -9,7 +9,7 @@ namespace Marketplace.Domain.ClassifiedAd
 {
     public class ClassifiedAdId : Value<ClassifiedAdId>
     {
-        private Guid Value { get; }
+        public Guid Value { get; }
 
         public ClassifiedAdId(Guid value) => Value = value;
 

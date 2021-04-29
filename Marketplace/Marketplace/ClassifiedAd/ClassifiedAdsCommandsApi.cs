@@ -25,25 +25,26 @@ namespace Marketplace.ClassifiedAd
         [Route("name")]
         [HttpPut]
         public Task<IActionResult> Put(V1.SetTitle request)
-            => RequestHandler.HandleRequest(request, 
-                _applicationService.Handle, Log);
+            => RequestHandler.HandleRequest(request, _applicationService.Handle, Log);
 
         [Route("text")]
         [HttpPut]
         public Task<IActionResult> Put(V1.UpdateText request)
-            => RequestHandler.HandleRequest(request, 
-                _applicationService.Handle, Log);
+            => RequestHandler.HandleRequest(request, _applicationService.Handle, Log);
 
         [Route("price")]
         [HttpPut]
         public Task<IActionResult> Put(V1.UpdatePrice request)
-            => RequestHandler.HandleRequest(request,
-                _applicationService.Handle, Log);
+            => RequestHandler.HandleRequest(request, _applicationService.Handle, Log);
+
+        [Route("requestpublish")]
+        [HttpPut]
+        public Task<IActionResult> Put(V1.RequestToPublish request)
+            => RequestHandler.HandleRequest(request, _applicationService.Handle, Log);
 
         [Route("publish")]
         [HttpPut]
-        public Task<IActionResult> Put(V1.RequestToPublish request)
-            => RequestHandler.HandleRequest(request,
-                _applicationService.Handle, Log);
+        public Task<IActionResult> Put(V1.Publish request)
+           => RequestHandler.HandleRequest(request, _applicationService.Handle, Log);
     }
 }

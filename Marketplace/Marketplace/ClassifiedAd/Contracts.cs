@@ -38,6 +38,12 @@ namespace Marketplace.ClassifiedAd
             {
                 public Guid Id { get; set; }
             }
+
+            public class Publish
+            {
+                public Guid Id { get; set; }
+                public Guid ApprovedBy { get; set; }
+            }
         }
     }
 }

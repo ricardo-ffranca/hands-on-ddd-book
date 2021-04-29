@@ -12,9 +12,9 @@ namespace Marketplace.Domain.Shared
     {
         private const string DefaultCurrency = "EUR";
 
-        public decimal Amount { get; }
+        public decimal Amount { get; private set; }
 
-        public Currency Currency { get; }
+        public Currency Currency { get; private set; }
 
         public static Money FromDecimal(decimal amount, string currency, ICurrencyLookup currencyLookup) =>
             new Money(amount, currency, currencyLookup);
